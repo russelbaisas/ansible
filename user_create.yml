@@ -1,0 +1,14 @@
+# Dirty Trick for creating and setting up password for new users
+
+---
+- hosts: [hosts]
+  tasks:
+  - name: Create Multiple UserID on Test Env
+    user:
+      name: "{{ item.names }}"
+      uid: "{{ item.uid }}"
+      group: cit
+  - name: Generate Default Password
+    shell: echo -e "4EQcz6XN\n4EQcz6XN" | sudo passwd "{{ item.names }}"
+    with_items:
+      - { names: 'c8181818', uid: '5222' }
