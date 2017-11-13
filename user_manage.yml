@@ -1,0 +1,29 @@
+#all the task required user with sudo permission,
+#the user(sas_infra)running this playbook has passwordless ssh setup between the spliece server and sudo access
+#http://docs.ansible.com/ansible/intro_getting_started.html
+#This playbook is written using a lot of ad-hoc command, someone with better ansible experience able to convert it to truly ansible way using ansible module.
+#http://docs.ansible.com/ansible/intro_adhoc.html
+#http://docs.ansible.com/ansible/modules.html
+#command to generate SSH Key per SAS requirement is at http://support.sas.com/kb/60/126.html
+#or http://support.sas.com/documentation/cdl/en/inmsref/67597/HTML/default/viewer.htm#n1jzampfenfogzn1pilp6rbxucxr.htm
+
+- hosts: all
+  tasks:
+  - name: Get List of Active Directory Users
+    shell: adquery user -n > /tmp/adusers.txt
+  - name: Create Active Directory Users Home Directory
+    shell: for user in `cat /tmp/adusers.txt`; do sudo su -l $user; done
+
+- hosts: [metadata master host]
+  tasks:
+  - name: Generate SSH Key
+    shell: for user in `cat /tmp/adusers.txt`; do sudo su $user -c "cd ~ | whoami | echo -e 'y\n' | ssh-keygen -t rsa -q -f ~/.ssh/id_rsa -N ''"; done
+  - name: Generate Authorized Keys
+    shell: for user in `cat /tmp/adusers.txt`; do sudo su $user -c "cd ~ | whoami | cat ~/.ssh/id_rsa.pub > ~/.ssh/authorized_keys"; done
+  - name: Temp location for Active Directory Users Home
+    shell: for user in `cat /tmp/adusers.txt`; do sudo cp -pr /home/$user /<NFSMOUNTED FILESYSSTEM>/tmp/; done
+
+- hosts: all
+  tasks:
+   - name: Propagate Passwordless SSH Key to Other Servers
+     shell: for user in `cat /tmp/adusers.txt`; do sudo cp -pr /<NFSMOUNTED FILESYSSTEM>/tmp/$user/.ssh /home/$user; done
