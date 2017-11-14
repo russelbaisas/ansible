@@ -1,0 +1,53 @@
+######
+#####
+#### Check SAS Service Status
+####
+####
+##
+---
+
+##
+##  Check UAT Metadata Server
+- hosts: [Metahosts]
+  tasks:
+   - name: Check the SAS Metadata Service Status
+     shell: [PATH]/sasconfig/meta/Lev2/sas.servers status
+     register: shell_out
+   - debug: msg="{{ shell_out.stdout.split('\n') }}"
+
+##
+##  Check UAT Compute Server
+- hosts: [ComputeHosts]
+  tasks:
+   - name: Check the SAS Metadata Service Status
+     shell: [PATH]/sasconfig/compute/Lev2/sas.servers status
+     register: shell_out
+   - debug: msg="{{ shell_out.stdout.split('\n') }}"
+
+##
+##  Check UAT VAhprisk Server
+- hosts: [VAHpriskHosts]
+  tasks:
+   - name: Check the SAS Metadata Service Status
+     shell: [PATH]/sasconfig/vahprisk/Lev2/sas.servers status
+     register: shell_out
+   - debug: msg="{{ shell_out.stdout.split('\n') }}"
+
+##
+##  Check UAT Midtier Server
+- hosts: [MidtierHosts]
+  tasks:
+   - name: Check the SAS Metadata Service Status
+     shell: [PATH]/sasconfig/mid/Lev2/sas.servers status
+     register: shell_out
+   - debug: msg="{{ shell_out.stdout.split('\n') }}"
+
+# Second Midtier
+#
+
+- hosts: [MidtierHosts]
+  tasks:
+   - name: Check the SAS Metadata Service Status
+     shell: [PATH]/sasconfig/mid/Lev2/sas.servers status
+     register: shell_out
+   - debug: msg="{{ shell_out.stdout.split('\n') }}"
