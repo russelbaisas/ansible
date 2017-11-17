@@ -1,11 +1,5 @@
-#all the task required user with sudo permission,
-#the user(sas_infra)running this playbook has passwordless ssh setup between the spliece server and sudo access
-#http://docs.ansible.com/ansible/intro_getting_started.html
-#This playbook is written using a lot of ad-hoc command, someone with better ansible experience able to convert it to truly ansible way using ansible module.
-#http://docs.ansible.com/ansible/intro_adhoc.html
-#http://docs.ansible.com/ansible/modules.html
-#command to generate SSH Key per SAS requirement is at http://support.sas.com/kb/60/126.html
-#or http://support.sas.com/documentation/cdl/en/inmsref/67597/HTML/default/viewer.htm#n1jzampfenfogzn1pilp6rbxucxr.htm
+# Dirty tricks for creating Home and SSh folder for Active Directory users
+#
 
 - hosts: all
   tasks:
