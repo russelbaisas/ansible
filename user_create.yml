@@ -1,4 +1,5 @@
 # Dirty Trick for creating and setting up password for new users
+# Creates userid, updates password and put the ID to non-expiry
 
 ---
 - hosts: [hosts]
@@ -10,5 +11,7 @@
       group: "{{ item.pgroup }}"
   - name: Generate Default Password
     shell: echo -e "booyahpw\nbooyahpw" | sudo passwd "{{ item.names }}"
+  - name: Set Non-Expiry Password
+    shell: chage -I -1 -m 0 -M 99999 -E -1 "{{ item.names }}"
     with_items:
       - { names: $1, uid: $2, pgroup: $3 }
