@@ -1,0 +1,14 @@
+---
+- hosts: <myhost>
+  tasks:
+  - name: Create ssh folder first before copying
+    become: true
+#    become_user: "{{ item }}"
+    become_method: sudo
+    file:
+      path: /home/{{ item }}/.ssh
+      state: directory
+      mode: 0640
+    with_items:
+      - 1111111
+      - 2222222
