@@ -7,8 +7,8 @@
     user:
       name: "{{ item.names }}"
       uid: "{{ item.uid }}"
-      group: cit
+      group: "{{ item.pgroup }}"
   - name: Generate Default Password
-    shell: echo -e "4EQcz6XN\n4EQcz6XN" | sudo passwd "{{ item.names }}"
+    shell: echo -e "booyahpw\nbooyahpw" | sudo passwd "{{ item.names }}"
     with_items:
-      - { names: 'c8181818', uid: '5222' }
+      - { names: $1, uid: $2, pgroup: $3 }
