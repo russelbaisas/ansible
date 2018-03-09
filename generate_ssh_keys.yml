@@ -1,0 +1,27 @@
+---
+- hosts: <myhost>
+  become: true
+  tasks:
+  - name: Display current user
+    command: id
+    register: id_command
+
+  - debug: var=id_command.stdout
+
+  - name: Generate SSH Keys for main server only
+    user:
+      name: "{{ item }}"
+      generate_ssh_key: yes
+      ssh_key_bits: 2048
+      ssh_key_file: .ssh/id_rsa
+    with_items:
+      - 1111111
+      - 2222222
+    register: public_keys
+
+  - name: Add public key to authorized_keys
+    authorized_key:
+      user: "{{ item.name }}"
+      state: present
+      key: "{{ item.ssh_public_key }}"
+    with_items: "{{ public_keys.results }}"
